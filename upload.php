@@ -1,28 +1,29 @@
 <?php
-header('Access-Control-Allow-Methods: POST');
+// Allow CORS (optional for cross-origin requests)
 header('Access-Control-Allow-Origin: *');
-header('Content-Type: application/json');  // Optional: Sets the response content type to JSON
+header('Access-Control-Allow-Methods: POST');
+header('Access-Control-Allow-Headers: Content-Type');
 
-// Check if the request method is POST
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Get the raw POST data (image)
-    $image = file_get_contents('php://input');
-    
-    // Save the image to a file
-    $result = file_put_contents('uploaded_image.jpg', $image);
-    
-    if ($result === false) {
-        // If the file saving failed, return an error
-        http_response_code(500);  // Internal Server Error
-        echo json_encode(["message" => "Failed to upload image"]);
+// Check if a file has been uploaded
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['image'])) {
+    $image = $_FILES['image'];
+
+    // Check for upload errors
+    if ($image['error'] === UPLOAD_ERR_OK) {
+        // Set the upload directory
+        $uploadDir = 'uploads/';
+        $uploadFile = $uploadDir . basename($image['name']);
+
+        // Move the uploaded file to the server
+        if (move_uploaded_file($image['tmp_name'], $uploadFile)) {
+            echo "Image uploaded successfully.";
+        } else {
+            echo "Failed to upload image.";
+        }
     } else {
-        // If the file was successfully saved
-        http_response_code(200);  // OK
-        echo json_encode(["message" => "Image uploaded successfully"]);
+        echo "Error uploading image.";
     }
 } else {
-    // If method is not POST, return 405 Method Not Allowed
-    http_response_code(405);
-    echo json_encode(["message" => "Method Not Allowed"]);
+    echo "No file uploaded.";
 }
 ?>
