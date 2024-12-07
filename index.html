@@ -1,17 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>My Awesome Website</title>
-  <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ESP32 Camera Feed</title>
 </head>
 <body>
-  <header>
-    <h1>esp32 project</h1>
-  </header>
-  <main>
-    <p>camera test page!</p>
-  </main>
+    <h1>Camera Feed</h1>
+    <div id="gallery">
+        <?php
+        $files = glob("uploads/*.jpg");
+        foreach ($files as $file) {
+            echo "<img src='$file' style='width:300px; margin:10px;' />";
+        }
+        ?>
+    </div>
 </body>
 </html>
