@@ -6,15 +6,13 @@
   <title>ESP32 Message</title>
 </head>
 <body>
-  <h1>ESP32 Message:</h1>
+  <h1>Message from ESP32:</h1>
   <p id="message">Loading...</p>
 
   <script>
-    const serverUrl = "https://your-intermediary-url-or-file-location";
-
     async function fetchMessage() {
       try {
-        const response = await fetch(serverUrl);
+        const response = await fetch("data.json");
         const data = await response.json();
         document.getElementById("message").textContent = data.message;
       } catch (error) {
@@ -23,7 +21,8 @@
       }
     }
 
-    setInterval(fetchMessage, 5000); // Update message every 5 seconds
+    // Update the message every 5 seconds
+    setInterval(fetchMessage, 5000);
     fetchMessage();
   </script>
 </body>
