@@ -1,19 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ESP32 Camera Feed</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ESP32 Message</title>
 </head>
 <body>
-    <h1>Camera Feed</h1>
-    <div id="gallery">
-        <?php
-        $files = glob("uploads/*.jpg");
-        foreach ($files as $file) {
-            echo "<img src='$file' style='width:300px; margin:10px;' />";
-        }
-        ?>
-    </div>
+  <h1>ESP32 Message:</h1>
+  <p id="message">Loading...</p>
+
+  <script>
+    const serverUrl = "https://your-intermediary-url-or-file-location";
+
+    async function fetchMessage() {
+      try {
+        const response = await fetch(serverUrl);
+        const data = await response.json();
+        document.getElementById("message").textContent = data.message;
+      } catch (error) {
+        console.error("Error fetching message:", error);
+        document.getElementById("message").textContent = "Error loading message";
+      }
+    }
+
+    setInterval(fetchMessage, 5000); // Update message every 5 seconds
+    fetchMessage();
+  </script>
 </body>
 </html>
