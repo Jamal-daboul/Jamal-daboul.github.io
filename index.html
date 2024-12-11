@@ -19,7 +19,7 @@
         const firebaseConfig = {
             apiKey: "AIzaSyAaGNb3Uoj77MpePTDfDrMrkgwS1EQEo8Q",
             authDomain: "esp32-data1-e6d69.firebaseapp.com",
-            databaseURL: "https://esp32-data1-e6d69-default-rtdb.asia-southeast1.firebasedatabase.app	",
+            databaseURL: "https://esp32-data1-e6d69-default-rtdb.asia-southeast1.firebasedatabase.app",
             projectId: "esp32-data1-e6d69",
             storageBucket: "esp32-data1-e6d69.firebasestorage.app",
             messagingSenderId: "580623399216",
@@ -36,7 +36,10 @@
         // Listen for value changes
         messageRef.on('value', (snapshot) => {
             const message = snapshot.val();
+            console.log("Message from Firebase:", message); // Log the message to the console
             document.getElementById('firebase-message').innerText = message;
+        }, (error) => {
+            console.error("Error fetching data:", error); // Log any errors
         });
     </script>
 </body>
