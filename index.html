@@ -34,7 +34,8 @@
         docRef.onSnapshot((doc) => {
             if (doc.exists) {
                 const data = doc.data();
-                document.getElementById('firebase-image').src = data.image_url;
+                const base64Image = data.image_data;
+                document.getElementById('firebase-image').src = "data:image/jpeg;base64," + base64Image;
             } else {
                 console.error("No such document!");
             }
