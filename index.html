@@ -1,36 +1,43 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>ESP32 Firebase</title>
-  <script src="https://www.gstatic.com/firebasejs/9.14.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.14.0/firebase-database.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Firebase Message Display</title>
+    <!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js"></script>
+
+    <!-- Add Firebase products that you want to use -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js"></script>
 </head>
 <body>
-  <h1>ESP32 Firebase Demo</h1>
-  <p>Message from ESP32: <span id="message"></span></p>
+    <h1>Message from Firebase</h1>
+    <p id="firebase-message">Loading...</p>
 
-  <script>
-    // Your web app's Firebase configuration
-    const firebaseConfig = {
-      apiKey: "YOUR_API_KEY",
-      authDomain: "YOUR_PROJECT.firebaseapp.com",
-      databaseURL: "https://YOUR_PROJECT.firebaseio.com",
-      projectId: "YOUR_PROJECT_ID",
-      storageBucket: "YOUR_PROJECT.appspot.com",
-      messagingSenderId: "YOUR_SENDER_ID",
-      appId: "YOUR_APP_ID"
-    };
+    <script>
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyAaGNb3Uoj77MpePTDfDrMrkgwS1EQEo8Q",
+            authDomain: "esp32-data1-e6d69.firebaseapp.com",
+            databaseURL: "https://esp32-data1-e6d69-default-rtdb.asia-southeast1.firebasedatabase.app	",
+            projectId: "esp32-data1-e6d69",
+            storageBucket: "esp32-data1-e6d69.firebasestorage.app",
+            messagingSenderId: "580623399216",
+            appId: "1:580623399216:web:1b951d10336acbf7eef0f5"
+        };
 
-    // Initialize Firebase
-    const app = firebase.initializeApp(firebaseConfig);
-    const db = firebase.database();
+        // Initialize Firebase
+        const app = firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
 
-    // Listen for changes in the Firebase database
-    const messageRef = firebase.database().ref('/message');
-    messageRef.on('value', (snapshot) => {
-      const message = snapshot.val();
-      document.getElementById('message').textContent = message;
-    });
-  </script>
+        // Reference to your message in the Firebase database
+        const messageRef = database.ref('/message');
+
+        // Listen for value changes
+        messageRef.on('value', (snapshot) => {
+            const message = snapshot.val();
+            document.getElementById('firebase-message').innerText = message;
+        });
+    </script>
 </body>
 </html>
