@@ -30,7 +30,7 @@
         const db = firebase.firestore();
 
         // الإشارة إلى الوثيقة في Firestore
-        const docRef = db.collection("images").doc("image1"); // تأكد من أن هذا هو مسار الوثيقة الصحيح
+        const docRef = db.collection("images"); // تأكد من أن هذا هو مسار الوثيقة الصحيح
 
         docRef.onSnapshot((doc) => {
             if (doc.exists) {
