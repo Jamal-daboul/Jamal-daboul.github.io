@@ -10,10 +10,11 @@
 </head>
 <body>
     <h1>Live Stream</h1>
-    <img id="firebase-image" src="loading.gif" alt="Loading...">
+    <!-- سيتم عرض الصورة مباشرة هنا بمجرد الوصول إليها من Firestore -->
+    <img id="firebase-image" src="" alt="Loading..." style="max-width: 100%; height: auto;">
 
     <script>
-        // Your Firebase configuration
+        // إعداد Firebase
         const firebaseConfig = {
             apiKey: "AIzaSyAaGNb3Uoj77MpePTDfDrMrkgwS1EQEo8Q",
             authDomain: "esp32-data1-e6d69.firebaseapp.com",
@@ -24,26 +25,23 @@
             appId: "1:580623399216:web:1b951d10336acbf7eef0f5"
         };
 
-        // Initialize Firebase
+        // تهيئة Firebase
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
-        // Reference to the images collection
-        const imagesCollectionRef = db.collection("images");
+        // الإشارة إلى الوثيقة في Firestore
+        const docRef = db.collection("images").doc("image1"); // تأكد من أن هذا هو مسار الوثيقة الصحيح
 
-        // Listen for updates to the images collection
-        imagesCollectionRef.onSnapshot((snapshot) => {
-            snapshot.docChanges().forEach((change) => {
-                if (change.type === "added") {
-                    // Get the base64 image data from the newly added document
-                    const imageData = change.doc.data().image_data;
-
-                    // Update the image source
-                    document.getElementById('firebase-image').src = "data:image/jpeg;base64," + imageData;
-                }
-            });
+        docRef.onSnapshot((doc) => {
+            if (doc.exists) {
+                const data = doc.data();
+                const base64Image = data.image_data; // بيانات الصورة المشفرة بـ base64
+                document.getElementById('firebase-image').src = "data:image/jpeg;base64," + base64Image;
+            } else {
+                console.error("لا توجد وثيقة بهذا الاسم!");
+            }
         }, (error) => {
-            console.error("Error fetching images from Firestore:", error);
+            console.error("حدث خطأ أثناء جلب الوثيقة:", error);
         });
     </script>
 </body>
