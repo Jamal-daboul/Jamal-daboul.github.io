@@ -10,11 +10,10 @@
 </head>
 <body>
     <h1>Live Stream</h1>
-    <!-- سيتم عرض الصورة مباشرة هنا بمجرد الوصول إليها من Firestore -->
-    <img id="firebase-image" src="" alt="Loading..." style="max-width: 100%; height: auto;">
+    <img id="firebase-image" alt="Loading...">
 
     <script>
-        // إعداد Firebase
+        // Your web app's Firebase configuration
         const firebaseConfig = {
             apiKey: "AIzaSyAaGNb3Uoj77MpePTDfDrMrkgwS1EQEo8Q",
             authDomain: "esp32-data1-e6d69.firebaseapp.com",
@@ -25,23 +24,25 @@
             appId: "1:580623399216:web:1b951d10336acbf7eef0f5"
         };
 
-        // تهيئة Firebase
+        // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
-        // الإشارة إلى الوثيقة في Firestore
-        const docRef = db.collection("images"); // تأكد من أن هذا هو مسار الوثيقة الصحيح
+        // Reference to the collection "images"
+        const imagesCollection = db.collection("images");
 
-        docRef.onSnapshot((doc) => {
-            if (doc.exists) {
+        // Listen for changes in the "images" collection
+        imagesCollection.onSnapshot((snapshot) => {
+            snapshot.forEach((doc) => {
                 const data = doc.data();
-                const base64Image = data.image_data; // بيانات الصورة المشفرة بـ base64
-                document.getElementById('firebase-image').src = "data:image/jpeg;base64," + base64Image;
-            } else {
-                console.error("لا توجد وثيقة بهذا الاسم!");
-            }
+                const base64Image = data.image_data;
+
+                // Display the image from Firebase Firestore
+                const imgElement = document.getElementById('firebase-image');
+                imgElement.src = "data:image/jpeg;base64," + base64Image;
+            });
         }, (error) => {
-            console.error("حدث خطأ أثناء جلب الوثيقة:", error);
+            console.error("Error fetching images:", error);
         });
     </script>
 </body>
