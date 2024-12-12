@@ -29,12 +29,13 @@
         const db = firebase.firestore();
 
         // Reference to the document in Firestore
-        const docRef = db.collection("your-collection-name").doc("your-document-id");
+        const docRef = db.collection("images").doc("XH1egVSKjkYQypAwreL6"); // Change to your correct collection and document ID
 
+        // Fetch and display image
         docRef.onSnapshot((doc) => {
             if (doc.exists) {
                 const data = doc.data();
-                const base64Image = data.image_data;
+                const base64Image = data.image_data; // Ensure this is the correct field name
                 document.getElementById('firebase-image').src = "data:image/jpeg;base64," + base64Image;
             } else {
                 console.error("No such document!");
