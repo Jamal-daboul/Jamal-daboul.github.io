@@ -4,8 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Firebase Image Viewer</title>
-    <script src="https://www.gstatic.com/firebasejs/9.17.2/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.17.2/firebase-database.js"></script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-app.js";
+        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-database.js";
+    </script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -31,7 +33,7 @@
         <!-- Images will be loaded here dynamically -->
     </div>
 
-    <script>
+    <script type="module">
         // Firebase configuration
         const firebaseConfig = {
             apiKey: "AIzaSyAaGNb3Uoj77MpePTDfDrMrkgwS1EQEo8Q",
@@ -44,17 +46,17 @@
         };
 
         // Initialize Firebase
-        const app = firebase.initializeApp(firebaseConfig);
-        const database = firebase.database();
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
 
         // Reference to the images in the database
-        const imagesRef = database.ref('/images');
+        const imagesRef = ref(database, '/images');
 
         // Container to display images
         const imageContainer = document.getElementById('image-container');
 
         // Fetch images from Firebase
-        imagesRef.on('value', (snapshot) => {
+        onValue(imagesRef, (snapshot) => {
             imageContainer.innerHTML = ''; // Clear previous images
 
             const images = snapshot.val();
