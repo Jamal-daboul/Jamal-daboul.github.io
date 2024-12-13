@@ -60,6 +60,12 @@
             // Clear the current image (if any)
             imageContainer.innerHTML = ''; 
 
+            // Create a new img element
+            const imgElement = document.createElement('img');
+            imgElement.src = `data:image/jpeg;base64,${base64Image}`;
+
+            // Append the image element to the container
+            imageContainer.appendChild(imgElement);
         }
 
         // Fetch images from Firebase
