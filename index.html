@@ -3,46 +3,69 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Live Stream from ESP32-CAM</title>
-    <!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
-    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
+    <title>Firebase Image Viewer</title>
+    <script src="https://www.gstatic.com/firebasejs/9.17.2/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.17.2/firebase-database.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        .image-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+        }
+        .image-container img {
+            max-width: 200px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+    </style>
 </head>
 <body>
-    <h1>Live Stream</h1>
-    <img id="firebase-image" alt="Loading...">
+    <h1>Firebase Image Viewer</h1>
+    <div id="image-container" class="image-container">
+        <!-- Images will be loaded here dynamically -->
+    </div>
 
     <script>
-        // Your web app's Firebase configuration
+        // Firebase configuration
         const firebaseConfig = {
             apiKey: "AIzaSyAaGNb3Uoj77MpePTDfDrMrkgwS1EQEo8Q",
             authDomain: "esp32-data1-e6d69.firebaseapp.com",
-            databaseURL: "https://esp32-data1-e6d69-default-rtdb.asia-southeast1.firebasedatabase.app",
+            databaseURL: "https://esp32-data1-e6d69-default-rtdb.asia-southeast1.firebasedatabase.app/",
             projectId: "esp32-data1-e6d69",
             storageBucket: "esp32-data1-e6d69.appspot.com",
-            messagingSenderId: "580623399216",
-            appId: "1:580623399216:web:1b951d10336acbf7eef0f5"
+            messagingSenderId: "your-sender-id",
+            appId: "your-app-id"
         };
 
         // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
+        const app = firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
 
-        // Reference to the collection "images"
-        const imagesCollection = db.collection("images");
+        // Reference to the images in the database
+        const imagesRef = database.ref('/images');
 
-        // Listen for changes in the "images" collection
-        imagesCollection.onSnapshot((snapshot) => {
-            snapshot.forEach((doc) => {
-                const data = doc.data();
-                const base64Image = data.image_data;
+        // Container to display images
+        const imageContainer = document.getElementById('image-container');
 
-                // Display the image from Firebase Firestore
-                const imgElement = document.getElementById('firebase-image');
-                imgElement.src = "data:image/jpeg;base64," + base64Image;
-            });
-        }, (error) => {
-            console.error("Error fetching images:", error);
+        // Fetch images from Firebase
+        imagesRef.on('value', (snapshot) => {
+            imageContainer.innerHTML = ''; // Clear previous images
+
+            const images = snapshot.val();
+            if (images) {
+                Object.keys(images).forEach((key) => {
+                    const imgBase64 = images[key];
+                    const imgElement = document.createElement('img');
+                    imgElement.src = `data:image/jpeg;base64,${imgBase64}`;
+                    imageContainer.appendChild(imgElement);
+                });
+            }
         });
     </script>
 </body>
