@@ -55,22 +55,29 @@
         // Container to display images
         const imageContainer = document.getElementById('image-container');
 
+        // Function to replace the image in the container
+        function displayImage(base64Image) {
+            // Clear the current image (if any)
+            imageContainer.innerHTML = ''; 
+
+            // Create a new img element
+            const imgElement = document.createElement('img');
+            imgElement.src = `data:image/jpeg;base64,${base64Image}`;
+
+            // Append the image element to the container
+            imageContainer.appendChild(imgElement);
+        }
+
         // Fetch images from Firebase
         imagesRef.on('value', (snapshot) => {
             const images = snapshot.val();
             if (images) {
-                // Get the latest image (if you want to display only one)
+                // Get the latest image (assuming the images are stored by time or order)
                 const latestImage = images[Object.keys(images).pop()];
-
-                // Clear the current image before updating
-                imageContainer.innerHTML = ''; 
-
-                // Create a new img element and set its source to the base64 image
-                const imgElement = document.createElement('img');
-                imgElement.src = `data:image/jpeg;base64,${latestImage}`;
-
-                // Append the new image to the container
-                imageContainer.appendChild(imgElement);
+                if (latestImage) {
+                    // Display the image by replacing the current one
+                    displayImage(latestImage);
+                }
             }
         });
     </script>
