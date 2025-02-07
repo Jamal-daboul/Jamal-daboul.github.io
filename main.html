@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Main Page</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://www.gstatic.com/firebasejs/9.9.3/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.9.3/firebase-firestore.js"></script>
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -37,24 +39,44 @@
     </section>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
+        // Initialize Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyClVlRVkRb3GZDhQGYIHjUdjgyAaSe_-0Q",
+            authDomain: "uniconsult-a7924.firebaseapp.com",
+            projectId: "uniconsult-a7924",
+            storageBucket: "uniconsult-a7924.firebasestorage.app",
+            messagingSenderId: "762820709780",
+            appId: "1:762820709780:web:46249a6589dddcecaf1381"
+        };
+
+        const app = firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore(app);
+
+        // Fetch submissions from Firestore
+        async function fetchSubmissions() {
             const submissionsList = document.getElementById("submissions-list");
-            const sampleSubmissions = [
-                { name: "Alice", field: "Computer Science", question: "Is AI a good career path?" },
-                { name: "Bob", field: "Mechanical Engineering", question: "What are job opportunities?" }
-            ];
+            const querySnapshot = await firebase.firestore().collection("submissions").get();
             
-            sampleSubmissions.forEach(submission => {
+            querySnapshot.forEach(doc => {
+                const data = doc.data();
                 const div = document.createElement("div");
                 div.classList.add("card", "p-3", "mb-3");
                 div.innerHTML = `
-                    <h5>${submission.name} - ${submission.field}</h5>
-                    <p>${submission.question}</p>
-                    <button class="btn btn-primary">Give a Consultation</button>
+                    <h5>${data.name} - ${data.field}</h5>
+                    <p>${data.question}</p>
+                    <button class="btn btn-primary" onclick="viewSubmission('${doc.id}')">View Submission</button>
                 `;
                 submissionsList.appendChild(div);
             });
-        });
+        }
+
+        // Function to navigate to the Preview Submission page
+        function viewSubmission(submissionId) {
+            window.location.href = `preview.html?id=${submissionId}`;
+        }
+
+        // Call the function to fetch submissions when the page is loaded
+        document.addEventListener("DOMContentLoaded", fetchSubmissions);
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
