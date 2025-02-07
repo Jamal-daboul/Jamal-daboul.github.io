@@ -3,83 +3,71 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Firebase Image Viewer</title>
-    <!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
-    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
-    <!-- Add Firebase products that you want to use -->
-    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database-compat.js"></script>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-        }
-        .image-container {
-            display: flex;
-            justify-content: center;
-            margin-top: 20px;
-        }
-        .image-container img {
-            max-width: 500px;
-            max-height: 500px;
-            border: 2px solid #ddd;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-        }
-    </style>
+    <title>University Consultation</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-    <h1>Firebase Image Viewer</h1>
-    <div id="image-container" class="image-container">
-        <!-- The image will be loaded here dynamically -->
-    </div>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">UniConsult</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="#home">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#student-form">Get Consultation</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#consultant-login">Consultant Login</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    
+    <header class="bg-primary text-white text-center py-5">
+        <div class="container">
+            <h1>Find the Right University Department for You</h1>
+            <p>Connect with experienced students and graduates to get guidance.</p>
+        </div>
+    </header>
 
-    <script>
-        // Firebase configuration
-        const firebaseConfig = {
-            apiKey: "AIzaSyAaGNb3Uoj77MpePTDfDrMrkgwS1EQEo8Q",
-            authDomain: "esp32-data1-e6d69.firebaseapp.com",
-            databaseURL: "https://esp32-data1-e6d69-default-rtdb.asia-southeast1.firebasedatabase.app",
-            projectId: "esp32-data1-e6d69",
-            storageBucket: "esp32-data1-e6d69.appspot.com",
-            messagingSenderId: "580623399216",
-            appId: "1:580623399216:web:1b951d10336acbf7eef0f5"
-        };
+    <section id="student-form" class="container my-5">
+        <h2 class="text-center">Request Consultation</h2>
+        <form id="consultationForm" class="mt-4">
+            <div class="mb-3">
+                <label class="form-label">Full Name</label>
+                <input type="text" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Email</label>
+                <input type="email" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Interested Field</label>
+                <input type="text" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Additional Question</label>
+                <textarea class="form-control" rows="3"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </section>
 
-        // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
-        const database = firebase.database();
+    <section id="consultant-login" class="container my-5">
+        <h2 class="text-center">Consultant Login</h2>
+        <form id="loginForm" class="mt-4">
+            <div class="mb-3">
+                <label class="form-label">Email</label>
+                <input type="email" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Password</label>
+                <input type="password" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-success">Login</button>
+        </form>
+    </section>
 
-        // Reference to the images in the Firebase database
-        const imagesRef = database.ref('/images');
-
-        // Container to display images
-        const imageContainer = document.getElementById('image-container');
-
-        // Function to replace the image in the container
-        function displayImage(base64Image) {
-            // Clear the current image (if any)
-            imageContainer.innerHTML = ''; 
-
-            // Create a new img element
-            const imgElement = document.createElement('img');
-            imgElement.src = `data:image/jpeg;base64,${base64Image}`;
-
-            // Append the image element to the container
-            imageContainer.appendChild(imgElement);
-        }
-
-        // Fetch images from Firebase
-        imagesRef.on('value', (snapshot) => {
-            const images = snapshot.val();
-            if (images) {
-                // Get the latest image (assuming the images are stored by time or order)
-                const latestImage = images[Object.keys(images).pop()];
-                if (latestImage) {
-                    // Display the image by replacing the current one
-                    displayImage(latestImage);
-                }
-            }
-        });
-    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
